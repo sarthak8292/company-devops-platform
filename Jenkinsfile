@@ -11,14 +11,14 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'python --version'
-                bat 'python -m pip install flask pytest'
+                bat '"C:\\Users\\SARTHAK\\AppData\\Local\\Programs\\Python\\Python314\\python.exe" --version'
+                bat '"C:\\Users\\SARTHAK\\AppData\\Local\\Programs\\Python\\Python314\\python.exe" -m pip install flask pytest'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'python -m pytest -v'
+                bat '"C:\\Users\\SARTHAK\\AppData\\Local\\Programs\\Python\\Python314\\python.exe" -m pytest -v'
             }
         }
 
@@ -33,6 +33,7 @@ pipeline {
         success {
             echo 'CI Pipeline completed successfully!'
         }
+
         failure {
             echo 'CI Pipeline failed. Please check the console output.'
         }
