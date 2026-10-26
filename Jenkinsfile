@@ -1,4 +1,5 @@
 
+
 pipeline {
     agent any
 
@@ -24,7 +25,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t company-devops-platform .'
+                bat '"C:\\Users\\SARTHAK\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" --version'
+                bat '"C:\\Users\\SARTHAK\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t company-devops-platform .'
             }
         }
     }
