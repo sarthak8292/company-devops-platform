@@ -1,8 +1,10 @@
 
+
 pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo 'Source code checked out from GitHub'
@@ -13,24 +15,46 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing Python dependencies'
-                sh 'python3 --version'
-                sh 'python3 -m pip install --user flask pytest'
+                echo 'Checking Python environment'
+
+                sh '''
+                    python3 --version
+
+                    if ! python3 -m venv --help >/dev/null 2>&1; then
+                        echo "Python venv support is missing."
+                        echo "Install the OS package for python3-venv."
+                        exit 1
+                    fi
+
+                    python3 -m venv .venv
+
+                    .venv/bin/python -m pip install --upgrade pip
+                    .venv/bin/python -m pip install flask pytest
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo 'Running Python tests'
-                sh 'python3 -m pytest -v'
+
+                sh '''
+                    .venv/bin/python -m pytest -v
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                echo 'Building Docker image'
+                echo 'Checking Docker'
+
                 sh 'docker --version'
-                sh 'docker build -t company-devops-platform .'
+
+                echo 'Building Docker image'
+
+                sh '''
+                    docker build -t company-devops-platform .
+                '''
             }
         }
     }
@@ -39,9 +63,11 @@ pipeline {
         success {
             echo 'CI Pipeline completed successfully!'
         }
+
         failure {
             echo 'CI Pipeline failed. Please check the console output.'
         }
+
         always {
             echo 'Jenkins pipeline execution finished.'
         }
